@@ -68,13 +68,18 @@ public class HomePage extends CommonAPI {
     }
 
     public void clickOnSidebarMenuIcon() {
-        waitFor(10000);
+        waitFor(5000);
         clickOn(sideBarMenu);
         log.info("click on sideBar menu success");
+
+    }
+
+    public WebElement sideBarMenu() {
+        return sideBarMenu;
     }
 
     public void clickOnAssignLeaveBtn() {
-        waitFor(10000);
+        waitFor(5000);
         clickOn(assignLeaveBtn);
         log.info("click on sideBar menu success");
     }
@@ -86,25 +91,20 @@ public class HomePage extends CommonAPI {
     }
 
 
-
     public boolean isMenuOptionsVisible() {
         waitFor(5000);
         return isVisible(adminText);
     }
 
-    public boolean isSidebarMenuButtonClickable() {
-        try {
-            sideBarMenu.click();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     public void clickOnLogoutButton() {
         accountButton.click();
         waitFor(5);
         logoutLink.click();
+    }
+
+    public boolean adminIsVisible() {
+        return isVisible(adminButton);
     }
 
 

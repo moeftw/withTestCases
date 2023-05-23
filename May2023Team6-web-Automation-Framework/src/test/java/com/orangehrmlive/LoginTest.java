@@ -4,10 +4,14 @@ import com.team6.base.CommonAPI;
 import com.team6.pages.orangehrmlive.HomePage;
 import com.team6.pages.orangehrmlive.LoginPage;
 import com.team6.utility.Utility;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
+import java.time.Duration;
 import java.util.Properties;
 
 public class LoginTest extends CommonAPI {
@@ -54,27 +58,29 @@ public class LoginTest extends CommonAPI {
 
     @Test
     public void validateSidebarMenuButton() {
-        HomePage hp = new HomePage(getDriver());
-        LoginPage lp = new LoginPage(getDriver());
-        // login
-        lp.enterUsername(validUsername);
-        lp.enterPassword(validPassword);
-        lp.clickOnLoginBtn();
-
-        // Verify that the sidebar menu button is clickable
-        Assert.assertTrue(hp.isSidebarMenuButtonClickable());
-    }
-
-    public void verifyInvalidLogin() {
         LoginPage loginPage = new LoginPage(getDriver());
+        HomePage homePage = new HomePage(getDriver());
 
-        loginPage.enterUsername("InvalidUser");
-        loginPage.enterPassword("InvalidPassword");
+        loginPage.enterUsername(validUsername);
+        loginPage.enterPassword(validPassword);
         loginPage.clickOnLoginBtn();
+        homePage.clickOnSidebarMenuIcon();
 
-      //  Assert.assertTrue(loginPage.isErrorMessageDisplayed());
+        boolean SideBarIsdisplayed = homePage.sideBarMenu().isDisplayed();
+        Assert.assertTrue(SideBarIsdisplayed);
     }
 
+    @Test
+    public void verifyValidLogin() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        HomePage homePage = new HomePage(getDriver());
 
+        loginPage.enterUsername("Admin");
+        loginPage.enterPassword("admin123");
+        loginPage.clickOnLoginBtn();
+        waitFor(10);
+        Assert.assertTrue(homePage.adminIsVisible());
+    }
 
+//  WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 }
