@@ -91,7 +91,10 @@ public class CommonAPI {
         return driver;
     }
     public String getCurrentTitle(){
-        return driver.getTitle();
+        return getDriver().getTitle();
+    }
+    public String getCurrentUrl(){
+        return getDriver().getCurrentUrl();
     }
     public String getElementText(WebElement element){
         return element.getText();
@@ -126,5 +129,12 @@ public class CommonAPI {
     }
     public boolean isChecked(WebElement element){
         return element.isSelected();
+    }
+
+    public void clearAndType(WebElement element, String inputText) {
+        // clears the text field
+        element.clear();
+        // enter new input
+        element.sendKeys(inputText);
     }
 }

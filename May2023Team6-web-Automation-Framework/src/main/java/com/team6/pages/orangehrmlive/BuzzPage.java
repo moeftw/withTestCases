@@ -8,10 +8,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class HomePage extends CommonAPI {
+public class BuzzPage extends CommonAPI {
     Logger log = LogManager.getLogger(HomePage.class.getName());
 
-    public HomePage(WebDriver driver) {
+    public BuzzPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
@@ -107,14 +107,10 @@ public class HomePage extends CommonAPI {
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[2]/div[3]")
     WebElement blankElement;
 
- @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[2]/div[1]/span")
+    @FindBy(xpath = "//*[@id=\"app\"]/div[1]/div[2]/div[2]/div/div[2]/div[1]/span")
     WebElement noRecordsFound;
-//
-// @FindBy(xpath = "")
-//    WebElement locatorName;
 
 
-    //methods
     private void waitFor(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
@@ -229,6 +225,9 @@ public class HomePage extends CommonAPI {
         return isVisible(adminButton);
     }
 
+    public boolean EmptyListIsDisplayed() {
+        return blankElement.isDisplayed();
+    }
 
     public String getHeaderText() {
         waitFor(5000);
@@ -245,6 +244,13 @@ public class HomePage extends CommonAPI {
         return purgeText.getText();
     }
 
+    public String QuickLaunchText() {
+        return quickLaunchText.getText();
+    }
+
+    public boolean noApprovalsNeeded() {
+        return noRecordsFound.isDisplayed();
+    }
 
     public String GetSupportText() {
         return SupportText.getText();

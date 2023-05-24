@@ -2,6 +2,7 @@ package com.orangehrmlive;
 
 import com.team6.base.CommonAPI;
 import com.team6.pages.orangehrmlive.HomePage;
+import com.team6.pages.orangehrmlive.LeavePage;
 import com.team6.pages.orangehrmlive.LoginPage;
 import com.team6.utility.Utility;
 import org.testng.Assert;
@@ -10,7 +11,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
-public class LoginTest extends CommonAPI {
+public class LeaveTest extends CommonAPI {
     Properties prop = Utility.loadProperties();
     String validUsername = Utility.decode(prop.getProperty("orangeHRM.username"));
     String validPassword = Utility.decode(prop.getProperty("orangeHRM.password"));
@@ -26,43 +27,32 @@ public class LoginTest extends CommonAPI {
     }
 
     @Test
-    public void validateLogin() {
-        LoginPage lp = new LoginPage(getDriver());
-        HomePage hp = new HomePage(getDriver());
-        // Verify login page
-        String expectedTitle = "OrangeHRM";
-        String actualTitle = getCurrentTitle();
-        Assert.assertEquals(expectedTitle, actualTitle);
+    public void approveLeave() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        LeavePage lP = new LeavePage(getDriver());
 
-        // Perform login with valid credentials
-        lp.enteringUserNamePassWord();
-        lp.clickOnLoginBtn();
+        loginPage.enteringUserNamePassWord();
+        loginPage.clickOnLoginBtn();
+        lP.clickOnLeave();
+        if (!lP.noApprovalsNeeded()) {
+            lP.selectPendingApprovals();
+            lP.approve();
+            Assert.assertTrue(lP.EmptyListIsDisplayed());
+
+        } else Assert.assertTrue(lP.noApprovalsNeeded());
+
 
     }
 
-
     @Test
-    public void verifyLoginPageElements() {
-        LoginPage lp = new LoginPage(getDriver());
-
-        Assert.assertTrue(lp.usernameField.isDisplayed());
-        Assert.assertTrue(lp.passwordField.isDisplayed());
-        Assert.assertTrue(lp.loginBtn.isDisplayed());
-    }
-
-    @Test
-    public void verifyValidLogin() {
+    public void rejectLeave() {
         LoginPage lp = new LoginPage(getDriver());
         HomePage hp = new HomePage(getDriver());
 
         lp.enteringUserNamePassWord();
         lp.clickOnLoginBtn();
-        waitFor(5);
-
-        Assert.assertTrue(getCurrentUrl().contains("dashboard"));
+        hp.clickOnLeave();
+        hp.selectPendingApprovals();
 
     }
-
-
-
 }

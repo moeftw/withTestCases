@@ -1,8 +1,7 @@
 package com.orangehrmlive;
 
 import com.team6.base.CommonAPI;
-import com.team6.pages.orangehrmlive.HomePage;
-import com.team6.pages.orangehrmlive.LoginPage;
+import com.team6.pages.orangehrmlive.*;
 import com.team6.utility.Utility;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -10,7 +9,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
-public class LoginTest extends CommonAPI {
+public class Maintenance extends CommonAPI {
     Properties prop = Utility.loadProperties();
     String validUsername = Utility.decode(prop.getProperty("orangeHRM.username"));
     String validPassword = Utility.decode(prop.getProperty("orangeHRM.password"));
@@ -24,42 +23,32 @@ public class LoginTest extends CommonAPI {
                       @Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url) throws MalformedURLException {
         super.setUp(useCloudEnv, envName, os, osVersion, browserName, browserVersion, url);
     }
-
     @Test
-    public void validateLogin() {
-        LoginPage lp = new LoginPage(getDriver());
-        HomePage hp = new HomePage(getDriver());
-        // Verify login page
-        String expectedTitle = "OrangeHRM";
-        String actualTitle = getCurrentTitle();
-        Assert.assertEquals(expectedTitle, actualTitle);
-
-        // Perform login with valid credentials
-        lp.enteringUserNamePassWord();
-        lp.clickOnLoginBtn();
-
-    }
-
-
-    @Test
-    public void verifyLoginPageElements() {
-        LoginPage lp = new LoginPage(getDriver());
-
-        Assert.assertTrue(lp.usernameField.isDisplayed());
-        Assert.assertTrue(lp.passwordField.isDisplayed());
-        Assert.assertTrue(lp.loginBtn.isDisplayed());
-    }
-
-    @Test
-    public void verifyValidLogin() {
+    public void accessMaintenanceTab() {
         LoginPage lp = new LoginPage(getDriver());
         HomePage hp = new HomePage(getDriver());
 
         lp.enteringUserNamePassWord();
         lp.clickOnLoginBtn();
-        waitFor(5);
+        hp.clickMaintenance();
+        hp.enterPassForMaintenance("admin123");
 
-        Assert.assertTrue(getCurrentUrl().contains("dashboard"));
+        Assert.assertEquals(hp.maintenanceTabHeader(), "Purge Employee Records");
+
+    }
+
+    @Test
+    public void accessDeniedMaintenanceTab() {
+        LoginPage lp = new LoginPage(getDriver());
+        HomePage hp = new HomePage(getDriver());
+        MaintenancePage mP = new MaintenancePage(getDriver());
+
+        lp.enteringUserNamePassWord();
+        lp.clickOnLoginBtn();
+
+        mP.clickMaintenance();
+        mP.enterPassForMaintenance("admin321");
+        Assert.assertEquals(hp.getDenyMessage(), "Invalid credentials");
 
     }
 

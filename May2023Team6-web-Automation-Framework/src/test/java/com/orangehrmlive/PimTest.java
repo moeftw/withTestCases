@@ -1,8 +1,7 @@
 package com.orangehrmlive;
 
 import com.team6.base.CommonAPI;
-import com.team6.pages.orangehrmlive.HomePage;
-import com.team6.pages.orangehrmlive.LoginPage;
+import com.team6.pages.orangehrmlive.*;
 import com.team6.utility.Utility;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -10,7 +9,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
-public class LoginTest extends CommonAPI {
+public class PimTest extends CommonAPI {
     Properties prop = Utility.loadProperties();
     String validUsername = Utility.decode(prop.getProperty("orangeHRM.username"));
     String validPassword = Utility.decode(prop.getProperty("orangeHRM.password"));
@@ -26,43 +25,33 @@ public class LoginTest extends CommonAPI {
     }
 
     @Test
-    public void validateLogin() {
+    public void verifyAddEmployee() {
         LoginPage lp = new LoginPage(getDriver());
-        HomePage hp = new HomePage(getDriver());
-        // Verify login page
-        String expectedTitle = "OrangeHRM";
-        String actualTitle = getCurrentTitle();
-        Assert.assertEquals(expectedTitle, actualTitle);
 
-        // Perform login with valid credentials
+        PimPage PIM = new PimPage(getDriver());
         lp.enteringUserNamePassWord();
         lp.clickOnLoginBtn();
 
-    }
-
-
-    @Test
-    public void verifyLoginPageElements() {
-        LoginPage lp = new LoginPage(getDriver());
-
-        Assert.assertTrue(lp.usernameField.isDisplayed());
-        Assert.assertTrue(lp.passwordField.isDisplayed());
-        Assert.assertTrue(lp.loginBtn.isDisplayed());
+        PIM.clickAddEmployeeButton();
+        PIM.enterFirstName("Mohammad");
+        PIM.enterLastName("Taseen");
+        PIM.clickSaveButton();
+        Assert.assertEquals(PIM.showsFirstAndLastName(), "Mohammad Taseen");
     }
 
     @Test
-    public void verifyValidLogin() {
+    public void deleteEmployeeRecords() {
         LoginPage lp = new LoginPage(getDriver());
-        HomePage hp = new HomePage(getDriver());
+        PimPage PIM = new PimPage(getDriver());
 
         lp.enteringUserNamePassWord();
         lp.clickOnLoginBtn();
-        waitFor(5);
+        PIM.clickOnPIM();
+        PIM.SelectAll();
+        PIM.clickOnDelete();
 
-        Assert.assertTrue(getCurrentUrl().contains("dashboard"));
-
+        Assert.assertTrue(PIM.confirmDelete());
     }
-
-
 
 }
+

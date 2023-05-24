@@ -1,8 +1,7 @@
 package com.orangehrmlive;
 
 import com.team6.base.CommonAPI;
-import com.team6.pages.orangehrmlive.HomePage;
-import com.team6.pages.orangehrmlive.LoginPage;
+import com.team6.pages.orangehrmlive.*;
 import com.team6.utility.Utility;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -10,7 +9,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
-public class LoginTest extends CommonAPI {
+public class MyInfo extends CommonAPI {
     Properties prop = Utility.loadProperties();
     String validUsername = Utility.decode(prop.getProperty("orangeHRM.username"));
     String validPassword = Utility.decode(prop.getProperty("orangeHRM.password"));
@@ -26,43 +25,30 @@ public class LoginTest extends CommonAPI {
     }
 
     @Test
-    public void validateLogin() {
+    public void changingPersonalInfo() {
         LoginPage lp = new LoginPage(getDriver());
         HomePage hp = new HomePage(getDriver());
-        // Verify login page
-        String expectedTitle = "OrangeHRM";
-        String actualTitle = getCurrentTitle();
-        Assert.assertEquals(expectedTitle, actualTitle);
-
-        // Perform login with valid credentials
+        MyInfoPage mI = new MyInfoPage(getDriver());
         lp.enteringUserNamePassWord();
         lp.clickOnLoginBtn();
-
-    }
-
-
-    @Test
-    public void verifyLoginPageElements() {
-        LoginPage lp = new LoginPage(getDriver());
-
-        Assert.assertTrue(lp.usernameField.isDisplayed());
-        Assert.assertTrue(lp.passwordField.isDisplayed());
-        Assert.assertTrue(lp.loginBtn.isDisplayed());
+        mI.clickOnMyInfo();
+        mI.enterFirstName("Domina");
+        mI.enterLastName("Burndead");
+        mI.clickOnSave();
+        Assert.assertEquals(mI.firstNameLastName(), "Domina Burndead");
     }
 
     @Test
-    public void verifyValidLogin() {
+    public void verifyAccountName() {
         LoginPage lp = new LoginPage(getDriver());
         HomePage hp = new HomePage(getDriver());
+        MyInfoPage mI = new MyInfoPage(getDriver());
 
         lp.enteringUserNamePassWord();
         lp.clickOnLoginBtn();
-        waitFor(5);
-
-        Assert.assertTrue(getCurrentUrl().contains("dashboard"));
-
+        mI.clickOnMyInfo();
+        // Verifying that Account Name matches.
+        Assert.assertEquals(mI.accountName(), mI.firstNameLastName());
     }
-
-
 
 }

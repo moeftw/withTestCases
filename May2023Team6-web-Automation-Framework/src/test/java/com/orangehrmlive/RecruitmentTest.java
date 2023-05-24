@@ -10,7 +10,7 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
-public class LoginTest extends CommonAPI {
+public class RecruitmentTest extends CommonAPI {
     Properties prop = Utility.loadProperties();
     String validUsername = Utility.decode(prop.getProperty("orangeHRM.username"));
     String validPassword = Utility.decode(prop.getProperty("orangeHRM.password"));
@@ -23,44 +23,6 @@ public class LoginTest extends CommonAPI {
                       @Optional("10") String osVersion, @Optional("chrome") String browserName, @Optional("110") String browserVersion,
                       @Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url) throws MalformedURLException {
         super.setUp(useCloudEnv, envName, os, osVersion, browserName, browserVersion, url);
-    }
-
-    @Test
-    public void validateLogin() {
-        LoginPage lp = new LoginPage(getDriver());
-        HomePage hp = new HomePage(getDriver());
-        // Verify login page
-        String expectedTitle = "OrangeHRM";
-        String actualTitle = getCurrentTitle();
-        Assert.assertEquals(expectedTitle, actualTitle);
-
-        // Perform login with valid credentials
-        lp.enteringUserNamePassWord();
-        lp.clickOnLoginBtn();
-
-    }
-
-
-    @Test
-    public void verifyLoginPageElements() {
-        LoginPage lp = new LoginPage(getDriver());
-
-        Assert.assertTrue(lp.usernameField.isDisplayed());
-        Assert.assertTrue(lp.passwordField.isDisplayed());
-        Assert.assertTrue(lp.loginBtn.isDisplayed());
-    }
-
-    @Test
-    public void verifyValidLogin() {
-        LoginPage lp = new LoginPage(getDriver());
-        HomePage hp = new HomePage(getDriver());
-
-        lp.enteringUserNamePassWord();
-        lp.clickOnLoginBtn();
-        waitFor(5);
-
-        Assert.assertTrue(getCurrentUrl().contains("dashboard"));
-
     }
 
 
